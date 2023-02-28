@@ -16,6 +16,11 @@ from collections import deque
 from load_subtrees import read_pair
 from load_data import load_dataset, read_valid_file
 from network import ContrastiveLoss, Siamese
+from sys import stdout
+
+def my_print(s):
+    print(s)
+    stdout.flush()
 
 def weights_init(mod):
     classname=mod.__class__.__name__
@@ -30,7 +35,7 @@ def weights_init(mod):
 
 class EarlyStopping:
     """Early stops the training if validation loss doesn't improve after a given patience."""
-    def __init__(self, patience=7, verbose=False, delta=0, path='checkpoint.pt', trace_func=print):
+    def __init__(self, patience=7, verbose=False, delta=0, path='checkpoint.pt', trace_func=my_print):
         self.patience = patience
         self.verbose = verbose
         self.counter = 0
@@ -111,23 +116,23 @@ def dirs_to_images_and_labels(batch_dirs, height=128, width=128, channel=3, resi
     return image_pairs
 
 if __name__ == '__main__':   
-    dataset_path = r'.\p_app_Td_sts_resized' # subtree imgs
+    dataset_path = 'data/p_app_Td_sts_resized' # subtree imgs
     input_shape = (256, 512, 3)
     learning_rate = 0.00005
     batch_size = 16
     epoch = 30
     #----------------------read data-----------------------------------------------------
     ui_dictionary = load_dataset(dataset_path)
-    _file = r'.\data\data.txt'
+    _file = r'data/data.txt'
     train_apps, valid_apps, test_apps = read_valid_file(_file)
-    _train_pair_file = r'.\data\train_st_pair.txt'      
+    _train_pair_file = r'data/train_st_pair.txt'      
     train_intra_pair, train_inter_pair = read_pair(_train_pair_file) 
     train_size = min(len(train_intra_pair), len(train_inter_pair))        
     steps_per_epoch_train = train_size//batch_size     
     #----------------------build network-----------------------------------------------------
     net = Siamese()
     net.apply(weights_init)
-    net.cuda()
+    # net.cuda()
     print(net)
     net.train()
     optimizer = torch.optim.Adam(net.parameters(),lr = learning_rate,weight_decay=0.95)
@@ -146,7 +151,7 @@ if __name__ == '__main__':
             if batch_id > steps_per_epoch_train:
                 print(batch_id, 'loss_val: ',loss_val,'time: ', time.time() - time_start)
                 break
-            x1, x2, y = torch.FloatTensor(x1).cuda(), torch.FloatTensor(x2).cuda(), torch.FloatTensor(y).cuda()
+            x1, x2, y = torch.FloatTensor(x1), torch.FloatTensor(x2), torch.FloatTensor(y)
             x1 = x1.permute(0,3,1,2); x2 = x2.permute(0,3,1,2)
             output1, output2 = net.forward(x1, x2)
             loss = criterion(output1, output2, y)    

@@ -23,8 +23,7 @@ from get_style_emb import read_data,get_ui_info
 from comm import get_samples,get_bank_size,remove_0,get_Repository,get_list_wbk
 
 import sys
-sys.path.append(r'.\StyleEmbedding')
-from load_data import get_s_app
+from StyleEmbedding.load_data import get_s_app
 
 class GANLoss3(nn.Module):
     """Reward-Refined NLLLoss Function for adversial training of Gnerator
@@ -172,12 +171,13 @@ TOTAL_BATCH = 200
 POSITIVE_FILE = 'real' 
 EVAL_FILE = 'eval'
 
-if opt.cuda is not None and opt.cuda >= 0:
-    print('opt.cuda is not None')
-    torch.cuda.set_device(opt.cuda)
-    opt.cuda = True
-else:
-    print('opt.cuda is None')
+opt.cuda = False
+# if opt.cuda is not None and opt.cuda >= 0:
+#     print('opt.cuda is not None')
+#     torch.cuda.set_device(opt.cuda)
+#     opt.cuda = True
+# else:
+#     print('opt.cuda is None')
 
 # Genrator Parameters
 g_emb_dim = 32 
@@ -198,14 +198,14 @@ if __name__ == '__main__':
     random.seed(SEED)
 
     file_csv = r'app_details.csv'  
-    cd_img = r'.\p_app_Td_sts_resized'    
-    txt_img = r'.\aTrees_dict_app'  
-    st_dir = r'.\p_app_Td_sts'
-    db_dir = r'.\st_bank_app'
-    emb_file = r'.\data\categories_app_emb'
+    cd_img = r'p_app_Td_sts_resized'    
+    txt_img = r'aTrees_dict_app'  
+    st_dir = r'p_app_Td_sts'
+    db_dir = r'st_bank_app'
+    emb_file = r'data\categories_app_emb'
     
-    m_save_path = r'.\models' # 3 loss
-    NEGATIVE_FILE = '.\samples'     
+    m_save_path = r'models' # 3 loss
+    NEGATIVE_FILE = 'samples'     
     if not os.path.exists(NEGATIVE_FILE):
         os.mkdir(NEGATIVE_FILE)
         

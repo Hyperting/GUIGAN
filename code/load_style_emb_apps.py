@@ -13,8 +13,8 @@ from apted import APTED, Config
 from  apted.helpers import Tree
 
 sys.path.append(r'.\StyleEmbedding')
-from load_data import get_s_app
-from model import siamese_net
+from StyleEmbedding.load_data import get_s_app
+from StyleEmbedding.train_siamese_net import siamese_net
 
 def get_images(train_uis, input_shape):
     num = len(train_uis)

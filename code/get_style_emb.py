@@ -10,9 +10,8 @@ from PIL import Image
 from apted import APTED, Config
 from  apted.helpers import Tree
 
-sys.path.append(r'.\StyleEmbedding')
-from load_data import get_s_app
-from network import Siamese
+from StyleEmbedding.load_data import get_s_app
+from StyleEmbedding.network import Siamese
 
 def get_images(train_uis, input_shape):
     num = len(train_uis)
@@ -114,10 +113,10 @@ if (__name__ == "__main__"):
     c_size = 50
 
     file_csv = r'app_details.csv'
-    txt_dir  = r'.\aTrees_dict_app'    
-    st_dir   = r'.\p_app_Td_sts'
-    cd_img   = r'.\p_app_Td_sts_resized'
-    path_file_name = r'.\data\categories_app_emb'
+    txt_dir  = r'aTrees_dict_app'    
+    st_dir   = r'p_app_Td_sts'
+    cd_img   = r'p_app_Td_sts_resized'
+    path_file_name = r'data/categories_app_emb'
     
     appsl, appsd = get_s_app(file_csv, st_dir)
     

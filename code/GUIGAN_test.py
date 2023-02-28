@@ -20,8 +20,7 @@ from get_style_emb import read_data,get_ui_info
 from comm import get_bank_size,get_Repository,get_list_wbk
 
 import sys
-sys.path.append(r'.\StyleEmbedding')
-from load_data import get_s_app
+from StyleEmbedding.load_data import get_s_app
 
 parser = argparse.ArgumentParser(description='Training Parameter')
 parser.add_argument('--cuda', action='store', default=0, type=int)
@@ -37,12 +36,13 @@ TOTAL_BATCH = 30
 POSITIVE_FILE = 'real' 
 EVAL_FILE = 'eval' 
 
-if opt.cuda is not None and opt.cuda >= 0:
-    print('opt.cuda is not None')
-    torch.cuda.set_device(opt.cuda)
-    opt.cuda = True
-else:
-    print('opt.cuda is None')
+opt.cuda = False
+# if opt.cuda is not None and opt.cuda >= 0:
+#     print('opt.cuda is not None')
+#     torch.cuda.set_device(opt.cuda)
+#     opt.cuda = True
+# else:
+#     print('opt.cuda is None')
 
 # Genrator Parameters
 g_emb_dim = 32      # Embedding 
@@ -63,18 +63,18 @@ if __name__ == '__main__':
     
     random.seed(SEED)
 
-    file_csv = r'app_details.csv'  
-    cd_img = r'.\p_app_Td_sts_resized'    
-    txt_img = r'.\aTrees_dict_app'  
-    st_dir = r'.\p_app_Td_sts'
-    db_dir = r'.\st_bank_app'
-    emb_file = r'.\data\categories_app_emb'
+    file_csv = r'StyleEmbedding/data/app_details.csv'  
+    cd_img = r'StyleEmbedding/data/p_app_Td_sts_resized'    
+    txt_img = r'StyleEmbedding/data/aTrees_dict_app'  
+    st_dir = r'StyleEmbedding/data/p_app_Td_sts'
+    db_dir = r'StyleEmbedding/data/st_bank_app'
+    emb_file = r'StyleEmbedding/data/categories_app_emb'
     
-    _save_path = r'.\models' # 3 loss    
+    _save_path = r'models' # 3 loss    
     if not pre_built:
-        NEGATIVE_FILE = r'.\results' 
+        NEGATIVE_FILE = r'../Results' 
     else:
-        NEGATIVE_FILE = r'.\results_pre' 
+        NEGATIVE_FILE = r'../Results_pre' 
     
     appsl, appsd = get_s_app(file_csv, st_dir)
     appsl1 = []
@@ -234,7 +234,7 @@ if __name__ == '__main__':
     print("\nTime for unifying x_info and x_emb：%.8s s" % dtime)
     print('\n')   
            
-    reduced_data1 = PCA(n_components=2).fit_transform(x_emb)
+    # reduced_data1 = PCA(n_components=2).fit_transform(x_emb)
   
     generator = Generator(VOCAB_SIZE, g_emb_dim, g_hidden_dim, opt.cuda)
     
